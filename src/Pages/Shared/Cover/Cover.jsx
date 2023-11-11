@@ -1,7 +1,7 @@
 import React from "react";
 import { Parallax } from "react-parallax";
 
-const Cover = ({ img, imgH, title }) => {
+const Cover = ({ img, title, recipe }) => {
   return (
     <div>
       <Parallax
@@ -12,7 +12,7 @@ const Cover = ({ img, imgH, title }) => {
       >
         Blur transition from min to max
         <div
-          className={`hero ${imgH}`}
+          className="hero h-[800px]"
           style={{
             backgroundImage: `url("${img}")`,
           }}
@@ -21,12 +21,7 @@ const Cover = ({ img, imgH, title }) => {
           <div className="hero-content text-center text-neutral-content">
             <div className="max-w-md">
               <h1 className="mb-5 text-5xl font-bold uppercase">{title}</h1>
-              <p className="mb-5">
-                Provident cupiditate voluptatem et in. Quaerat fugiat ut
-                assumenda excepturi exercitationem quasi. In deleniti eaque aut
-                repudiandae et a id nisi.
-              </p>
-      
+              <p className="mb-5">{recipe}</p>
             </div>
           </div>
         </div>
