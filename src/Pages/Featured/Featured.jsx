@@ -1,4 +1,4 @@
-import React from "react";
+
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import featuredImg from "../../../src/assets/home/featured.jpg";
 import "./Featured.css";
