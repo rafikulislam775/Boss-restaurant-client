@@ -1,8 +1,22 @@
-
+import { Helmet } from "react-helmet-async";
+import { useForm } from "react-hook-form";
 
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+    console.log(watch("example"));
+  }; // watch input value by passing the name of it
   return (
     <div>
+      <Helmet>
+        <title>Boss | Register</title>
+      </Helmet>
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
@@ -14,28 +28,57 @@ const Register = () => {
             </p>
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <form className="card-body">
+            <form onSubmit={handleSubmit(onSubmit)} className="card-body">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Name</span>
+                </label>
+                <input
+                  /* include validation with required or other standard HTML validation rules */
+                  {...register("name", { required: true })}
+                  type="text"
+                  placeholder="name"
+                  className="input input-bordered"
+                />
+                {errors.name && (
+                  <span className="text-red-700">Name is required</span>
+                )}
+              </div>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
                 </label>
                 <input
+                  {...register("email", { required: true })}
                   type="email"
                   placeholder="email"
                   className="input input-bordered"
                   required
                 />
+                {errors.email && (
+                  <span className="text-red-700">email is required</span>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Password</span>
                 </label>
                 <input
+                  {...register("password", {
+                    required: true,
+                    minLength: 6,
+                    maxLength: 20,
+                  })}
                   type="password"
                   placeholder="password"
                   className="input input-bordered"
                   required
                 />
+                {errors.password && (
+                  <p className="text-red-700">
+                    Password must be 6 characters long
+                  </p>
+                )}
                 <label className="label">
                   <a href="#" className="label-text-alt link link-hover">
                     Forgot password?
@@ -43,7 +86,11 @@ const Register = () => {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Login</button>
+                <input
+                  className="btn btn-primary"
+                  type="submit"
+                  value="sign UP"
+                />
               </div>
             </form>
           </div>
