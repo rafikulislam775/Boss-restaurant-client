@@ -3,6 +3,8 @@ import {
   MdOutlineBookOnline,
   MdOutlineCalendarMonth,
   MdOutlineHome,
+  MdOutlineMenu,
+  MdOutlineMenuBook,
   MdOutlineReviews,
   MdOutlineShop2,
   MdOutlineShoppingBag,
@@ -51,6 +53,12 @@ const Dashboard = () => {
             <NavLink to="/">
               <MdOutlineBook />
               Home
+            </NavLink>
+          </li>
+          <li className="bg-black rounded-lg">
+            <NavLink to="/">
+              <MdOutlineMenu/>
+            Menu
             </NavLink>
           </li>
         </ul>
