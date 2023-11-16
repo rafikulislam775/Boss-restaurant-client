@@ -1,12 +1,18 @@
 import { MdOutlineRestoreFromTrash } from "react-icons/md";
 import useCart from "../../Hooks/useCart";
 import Swal from "sweetalert2";
+import useAxios from "../../Hooks/useAxios";
 
 const Cart = () => {
-  const { cart } = useCart();
+  const { cart, refetch, isLoading } = useCart();
+  if (isLoading) {
+    return <span className="loading loading-spinner loading-lg"></span>;
+  }
   const totalPrice = cart?.reduce((total, item) => total + item.price, 0);
-  //
+  const axiosUse = useAxios();
+  //delete function
   const handleDelete = (id) => {
+    console.log(typeof id);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -17,10 +23,15 @@ const Cart = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
+        axiosUse.delete(`carts/${id}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+          }
         });
       }
     });
@@ -28,8 +39,8 @@ const Cart = () => {
   return (
     <div>
       <div>
-        <h1 className="text-4xl">items: {cart.length}</h1>
-        <h1 className="text-4xl">Total Price: {totalPrice}</h1>
+        <h1 className="text-4xl">items: {cart?.length}</h1>
+        <h1 className="text-4xl">Total Price: {totalPrice || ""}</h1>
         <button className="btn-sm btn  btn-outline ">Pay</button>
       </div>
       <div>

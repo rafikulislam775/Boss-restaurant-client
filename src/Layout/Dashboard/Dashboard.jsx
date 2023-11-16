@@ -11,8 +11,10 @@ import {
   MdOutlineShoppingCart,
 } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
+import useCart from "../../Hooks/useCart";
 
 const Dashboard = () => {
+  const { cart } = useCart();
   return (
     <div className="flex">
       <div className="w-64 h-screen bg-orange-400">
@@ -24,9 +26,9 @@ const Dashboard = () => {
             </NavLink>
           </li>
           <li className="bg-black rounded-lg my-4">
-            <NavLink to="/dashboard/review">
+            <NavLink to="/dashboard/cart">
               <MdOutlineShoppingCart />
-              My cart
+              My cart({cart.length})
             </NavLink>
           </li>
           <li className="bg-black rounded-lg">
@@ -57,8 +59,8 @@ const Dashboard = () => {
           </li>
           <li className="bg-black rounded-lg">
             <NavLink to="/">
-              <MdOutlineMenu/>
-            Menu
+              <MdOutlineMenu />
+              Menu
             </NavLink>
           </li>
         </ul>
