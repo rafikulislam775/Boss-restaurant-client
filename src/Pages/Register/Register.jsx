@@ -1,16 +1,44 @@
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import useAuth from "../../Hooks/useAuth";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate()
+  const { createUser, updateUserProfile } = useAuth();
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
+
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
     console.log(data);
-    console.log(watch("example"));
+    createUser(data.email, data.password).then((res) => {
+      const logUser = res.user;
+      console.log(logUser);
+      // alert("success created user");
+      updateUserProfile(data.name, data.photoURL)
+        .then(() => {
+          // Profile updated!
+          console.log("user profile updated");
+          reset();
+          Swal.fire({
+            title: "Thank You!",
+            text: "successfully created your account !",
+            icon: "success",
+          });
+          navigate('/')
+          
+        })
+        .catch((error) => {
+          // An error occurred
+          console.log(error.message);
+        });
+    });
+    // console.log(watch("example"));
   }; // watch input value by passing the name of it
   return (
     <div>
@@ -42,6 +70,21 @@ const Register = () => {
                 />
                 {errors.name && (
                   <span className="text-red-700">Name is required</span>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">PhotoURL</span>
+                </label>
+                <input
+                  /* include validation with required or other standard HTML validation rules */
+                  {...register("photoURL", { required: true })}
+                  type="text"
+                  placeholder="PhotoURL"
+                  className="input input-bordered"
+                />
+                {errors.photoURL && (
+                  <span className="text-red-700">PhotoURL is required</span>
                 )}
               </div>
               <div className="form-control">

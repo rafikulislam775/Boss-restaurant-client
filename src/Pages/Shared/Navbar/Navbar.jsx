@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
-
+import useAuth from "../../../Hooks/useAuth";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import useCart from "../../../Hooks/useCart";
 const Navbar = () => {
+  const { cart } = useCart();
+  const { user, logOut } = useAuth();
+  const handleLogout = () => {
+    logOut()
+      .then(() => {})
+      .catch((err) => console.log(err));
+  };
+  console.log(user);
   const menus = (
     <>
       <li>
@@ -12,17 +22,24 @@ const Navbar = () => {
       <li>
         <Link to="/order">Order</Link>
       </li>
-      <li>
-        <Link to="/login">Login</Link>
-      </li>
+
       <li>
         <Link to="/register">Register</Link>
+      </li>
+      <li>
+        <Link to="/secret">Secret</Link>
+      </li>
+      <li>
+        <Link to="/dashboard/cart">
+          <MdOutlineShoppingCart />
+          <div className="badge badge-secondary">+{cart.length}</div>
+        </Link>
       </li>
     </>
   );
   return (
-    <div className="">
-      <div className="navbar fixed z-10 opacity-30 text-white  bg-black">
+    <div className="  text-white  ">
+      <div className="navbar fixed z-10  opacity-30 bg-black">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -54,7 +71,20 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{menus}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          {user ? (
+            <>
+              <div className=" w-12 rounded-full">
+                <img className="w-12 rounded-full" src={user?.photoURL} />
+              </div>
+              <button onClick={handleLogout} className="btn btn-ghost">
+                LogOut
+              </button>
+            </>
+          ) : (
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          )}
         </div>
       </div>
     </div>

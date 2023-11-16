@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
@@ -6,8 +6,14 @@ import {
   validateCaptcha,
 } from "react-simple-captcha";
 import useAuth from "../../Hooks/useAuth";
+import Swal from "sweetalert2";
+import { useLocation, useNavigate } from "react-router-dom";
 const Login = () => {
+  //try to user send the going path
+  const location = useLocation();
+  const navigate = useNavigate();
   //get data from auth
+  //
   const { signIn } = useAuth();
   const handleLogin = (e) => {
     e.preventDefault();
@@ -18,6 +24,13 @@ const Login = () => {
     signIn(email, password)
       .then((res) => {
         const user = res.user;
+        //now to navigate the user
+        navigate(location?.state ? location?.state : "/");
+        Swal.fire({
+          title: "Good job!",
+          text: "successfully logIn!",
+          icon: "success",
+        });
         console.log(user);
       })
       .catch((error) => {
@@ -27,13 +40,12 @@ const Login = () => {
       });
   };
 
-  const captchaRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
   useEffect(() => {
     loadCaptchaEnginge(6);
   }, []);
-  const handleValidateCaptcha = () => {
-    const userCaptcha_value = captchaRef.current.value;
+  const handleValidateCaptcha = (e) => {
+    const userCaptcha_value = e.target.value;
     // console.log(userCaptcha_value);
     if (validateCaptcha(userCaptcha_value)) {
       setDisabled(false);
@@ -82,18 +94,12 @@ const Login = () => {
                   <LoadCanvasTemplate />
                 </label>
                 <input
-                  ref={captchaRef}
+                  onBlur={handleValidateCaptcha}
                   type="text"
                   name="captcha"
                   placeholder="Type your captcha above"
                   className="input input-bordered"
                 />
-                <button
-                  onClick={handleValidateCaptcha}
-                  className="btn btn-outline btn-xs mt-2"
-                >
-                  validate
-                </button>
               </div>
               <div className="form-control mt-6">
                 <input
